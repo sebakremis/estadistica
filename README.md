@@ -11,7 +11,7 @@ Una herramienta interactiva diseñada para automatizar la creación de tablas de
 * **Procesamiento de Datos:** Entrada manual o pegado directo desde Excel/CSV.
 * **Tabla Estadística Completa:** Cálculo automático de frecuencias absolutas ($f_i$), relativas ($h_i$), acumuladas ($F_i, H_i$) y porcentajes.
 * **Métricas Clave:** Cálculo instantáneo de Media, Mediana, Moda, Varianza y Desviación Estándar.
-* **Visualización Interactiva:** 📊 **Histograma** para distribución de frecuencias.
+* **Visualización Interactiva:** Histograma para distribución de frecuencias.
 
 **Ejecutar app desde Streamlit** (Sin instalaciones necesarias):
 
@@ -23,4 +23,4 @@ Una herramienta interactiva diseñada para automatizar la creación de tablas de
 * `Altair` 
 
 ## 📄 Licencia
-Este proyecto está bajo la Licencia MIT - siéntete libre de usarlo y modificarlo para tus propósitos académicos o profesionales.
+Este proyecto está bajo la Licencia MIT - siéntete libre de usarlo y modificarlo para propósitos académicos o profesionales.
