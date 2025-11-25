@@ -5,6 +5,25 @@ import altair as alt
 # Configuración de la página
 st.set_page_config(layout="wide", page_title="Estadística Descriptiva")
 
+@st.cache_data
+def procesar_datos(cadena_valores: str) -> pd.Series:
+    '''
+    Procesa una cadena de valores separados por espacios.
+    Maneja errores si el usuario introduce texto no numérico.
+    :param cadena_valores: Cadena con valores separados por espacios.
+    :return: Serie de Pandas.
+    '''
+    try:
+        if not cadena_valores.strip():
+            return pd.Series(dtype=int)  # Retorna una Serie vacía si la cadena está vacía
+        cadena_limpia=cadena_valores.replace(',', ' ')  # Reemplaza comas por espacios
+        lista_valores=cadena_limpia.split()  
+        lista_valores=[int(valor) for valor in lista_valores]  # Convierte a enteros
+        return pd.Series(lista_valores)
+    except ValueError:
+        st.error("Error: Por favor, introduce solo números enteros separados por espacios o comas.")
+        return pd.Series(dtype=int)  # Retorna una Serie vacía en caso de error
+
 def crear_tabla_estadistica(valores: pd.Series) -> pd.DataFrame:
     '''
     Crea una tabla estadística a partir de valores discretos.
@@ -31,16 +50,29 @@ def crear_tabla_estadistica(valores: pd.Series) -> pd.DataFrame:
     tabla.index.name='Valores' # Nombrar el índice   
     return tabla.round(4) # Redondear a 4 decimales
 
-# Ejemplo de uso a partir de una cadena de valores
-valores="12 13 12 12 13 14 13 13 13 12 13 14 13 15 14 13 13 13 14 14 14 15 12 15 14 15 15 16 14 16 12 14 14 14 18 15 16 16 13 15 16 14 15 17 15 16 18 16 16 16 12 14 13 13 16 13 12 13 13 13 14 15 15 13 14 17 17 13 14 14 14 14 17 15 13 14 13 14 15 17 13 14 13 14 14 14 16 17 14 14 15 15 18 13 16 15 13 12 17 17"
-lista_valores=valores.split()
-lista_valores=[int(edad) for edad in lista_valores] # Convertir a enteros
-serie_valores=pd.Series(lista_valores) # Crear Serie de Pandas
 
 def main():
-    st.title("Estadística Descriptiva de Valores Discretos")
-    st.divider() # Línea divisoria   
-    st.write("## Tabla de Distribución de Frecuencias")
+    st.title("📊 Dashboard de Estadística Descriptiva - Valores Discretos")
+    # --- Sidebar para entrada de datos ---
+    with st.sidebar:
+        st.header("Configuración de Datos")
+        valores_default = "15 16 14 12 15 15 14 18 16 12 14 12 15 14 14 15 14 13 16 16 13 16 17 14 13 12 14 17 13 14 13 15 15 15 18 14 16 14 14 14 13 15 12 13 14 14 13 13 17 13"
+        entrada_usuario= st.text_area(
+            "Reemplaza con tus datos:",
+            value=valores_default,
+            height=200,
+            help="Reemplaza los valores del ejemplo con números enteros separados por espacios o comas."
+        )
+        st.caption("💡 **Tip:** Puedes copiar datos desde una hoja de cálculo y pegarlos en el cuadro.")
+    # Procesar los datos ingresados
+    serie_valores=procesar_datos(entrada_usuario)
+    
+
+    if serie_valores.empty:
+        st.warning("👈 Ingresa datos numéricos en el menú lateral, luego presiona Ctrl+Enter para actualizar el tablero.")
+        return
+
+    st.write("## Distribución de Frecuencias")
     tabla_estadistica = crear_tabla_estadistica(serie_valores)
 
     st.dataframe(tabla_estadistica,
