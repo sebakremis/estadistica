@@ -1,5 +1,6 @@
 # 📊 Colección de Herramientas Estadísticas con Python
-Este repositorio aloja aplicaciones interactivas desarrolladas en **Python** y **Streamlit** para el análisis estadístico, ciencia de datos y visualización.
+
+Este repositorio aloja aplicaciones de Estadística desarrolladas con **Python** durante mis estudios del Master Data Science, Big Data & Business Analytics de la Universidad Complutense de Madrid.
 ---
 
 ## 🗂️ Proyectos Incluidos
@@ -11,6 +12,10 @@ Una herramienta interactiva diseñada para automatizar la creación de tablas de
 * **Tabla Estadística Completa:** Cálculo automático de frecuencias absolutas ($f_i$), relativas ($h_i$), acumuladas ($F_i, H_i$) y porcentajes.
 * **Métricas Clave:** Cálculo instantáneo de Media, Mediana, Moda, Varianza y Desviación Estándar.
 * **Visualización Interactiva:** 📊 **Histograma** para distribución de frecuencias.
+
+**Ejecutar app desde Streamlit** (Sin instalaciones necesarias):
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://statboard.streamlit.app)
 
 ## 🛠️ Tecnologías Utilizadas
 * `Streamlit`
