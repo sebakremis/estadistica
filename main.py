@@ -76,7 +76,7 @@ def main():
         # 4. Generar Gráfico (Usando core/visualization.py)
         # Pasamos la tabla estadística ya calculada
         grafico = crear_histograma(tabla_estadistica)
-        st.altair_chart(grafico, width='stretch')
+        st.plotly_chart(grafico)
 
 if __name__ == "__main__":
     main()

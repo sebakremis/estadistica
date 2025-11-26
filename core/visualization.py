@@ -1,22 +1,32 @@
 # core/visualization.py
-import altair as alt
 import pandas as pd
+import plotly.express as px
 
-def crear_histograma(tabla_estadistica: pd.DataFrame) -> alt.Chart:
-    '''
-    Genera un gráfico de barras (histograma) usando Altair basado en la tabla de frecuencias.
-    '''
-    datos_grafico = tabla_estadistica.reset_index() # Reiniciar el índice para Altair
-    
-    grafico = alt.Chart(datos_grafico).mark_bar(size=40).encode(
-        # Eje X: Usamos la columna 'Valores' como Ordinal (:O)
-        x=alt.X('Valores:O', axis=alt.Axis(labelAngle=0), title='Valores'),
-        # Eje Y: Usamos la Frecuencia Absoluta
-        y=alt.Y('Frecuencia Absoluta (fi)', title='Frecuencia Absoluta'),
-        tooltip=['Valores', 'Frecuencia Absoluta (fi)']
-    ).properties(
-        height=400,
-        title='Histograma de Frecuencias'
+def crear_histograma(tabla_estadistica: pd.DataFrame):
+    datos = tabla_estadistica.reset_index()
+    datos['Valores'] = datos['Valores'].astype(str)
+
+    fig = px.bar(
+        datos,
+        x='Valores',
+        y='Frecuencia Absoluta (fi)',
+        title='Histograma de Frecuencias',
     )
-    
-    return grafico
+
+    # Eliminar espacios entre barras
+    fig.update_layout(
+        bargap=0,
+        bargroupgap=0,
+        xaxis=dict(
+            categoryorder='array',
+            categoryarray=list(datos['Valores'])
+        ),
+        yaxis_title='Frecuencia Absoluta',
+        xaxis_title='Valores',
+    )
+
+    fig.update_traces(marker_line_color='white', marker_line_width=1)
+
+    return fig
+
+
