@@ -20,7 +20,7 @@ def main():
             "Reemplaza con tus datos:",
             value=valores_default,
             height=200,
-            help="Reemplaza los valores del ejemplo con números enteros separados por espacios o comas."
+            help="Reemplaza los valores del ejemplo con números separados por espacios o comas."
         )
         st.caption("💡 **Tip:** Puedes copiar datos desde Excel/CSV y pegarlos en el cuadro.")
 
@@ -39,7 +39,7 @@ def main():
     st.dataframe(tabla_estadistica,
                  width='stretch',
                  column_config={
-                    'Valores': st.column_config.NumberColumn(format="%d", width='medium'),
+                    'Valores': st.column_config.NumberColumn(format="%.2f", width='medium'),
                     'Frecuencia Absoluta (fi)': st.column_config.NumberColumn(format="%d", width='medium'),
                     'Frecuencia Relativa (hi)': st.column_config.NumberColumn(format="%.2f", width='medium'),
                     'Porcentaje (pi)': st.column_config.NumberColumn(format="%.2f%%", width='medium'),

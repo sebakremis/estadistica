@@ -13,12 +13,12 @@ def procesar_datos(cadena_valores: str) -> pd.Series:
     '''
     try:
         if not cadena_valores.strip():
-            return pd.Series(dtype=int)  # Retorna una Serie vacía si la cadena está vacía
+            return pd.Series(dtype=float)  # Retorna una Serie vacía si la cadena está vacía
         
         cadena_limpia = cadena_valores.replace(',', ' ')  # Reemplaza comas por espacios
         lista_valores = cadena_limpia.split()   
-        lista_valores = [int(valor) for valor in lista_valores]  # Convierte a enteros
+        lista_valores = [float(valor) for valor in lista_valores]  # Convierte a valores flotantes
         return pd.Series(lista_valores)
     except ValueError:
         st.error("Error: Por favor, introduce solo números enteros separados por espacios o comas.")
-        return pd.Series(dtype=int)
+        return pd.Series(dtype=float)

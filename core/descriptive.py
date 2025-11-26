@@ -3,7 +3,7 @@ import pandas as pd
 
 def crear_tabla_estadistica(valores: pd.Series) -> pd.DataFrame:
     '''
-    Crea una tabla estadística a partir de valores discretos.
+    Crea una tabla estadística a partir de valores numéricos.
     Calcula frecuencias absolutas, relativas, acumuladas y porcentajes.
     '''    
     # Calcular Frecuencia Absoluta (fi)
