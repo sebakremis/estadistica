@@ -4,7 +4,7 @@ Este repositorio aloja aplicaciones de Estadística desarrolladas con **Python**
 ---
 
 ## 🗂️ Proyectos Incluidos
-### 1. StatBoard: Estadística Descriptiva para Datos Discretos
+### 1. StatBoard Discreto: Estadística Descriptiva para Datos Discretos
 Una herramienta interactiva diseñada para automatizar la creación de tablas de frecuencia y análisis visual de variables cuantitativas discretas.
 
 **Características Principales:**
@@ -13,9 +13,11 @@ Una herramienta interactiva diseñada para automatizar la creación de tablas de
 * **Métricas Clave:** Cálculo instantáneo de Media, Mediana, Moda, Varianza y Desviación Estándar.
 * **Visualización Interactiva:** Histograma para distribución de frecuencias.
 
-**Ejecutar app desde Streamlit** (Sin instalaciones necesarias):
+**Ejecutar app desde Streamlit** (No requiere instalaciones):
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://statboard.streamlit.app)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://statboarddiscreto.streamlit.app)
+
+### 2. StatBoard Intervalos: Estadística Descriptiva para Datos Continuos (próximamente)
 
 ## 🛠️ Tecnologías Utilizadas
 * `Streamlit`
