@@ -157,6 +157,13 @@ def main():
             # Generar Gráfico
             grafico = crear_histograma(tabla_estadistica)
             st.plotly_chart(grafico)
+        # --- Creditos ---
+        st.divider()
+        st.markdown(
+            "🔗 [Ver código fuente en GitHub](https://github.com/sebakremis/StatBoard)",
+            unsafe_allow_html=True
+        )
+        st.markdown("👤 Desarrollado por Sebastian Kremis")
 
 if __name__ == "__main__":
     main()
