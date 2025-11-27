@@ -47,7 +47,7 @@ Si prefieres ejecutar la aplicación en tu entorno local:
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Librerías Utilizadas
 
 * `Streamlit`
 * `Pandas`
