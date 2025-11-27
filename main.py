@@ -25,11 +25,11 @@ def main():
     # --- Sidebar para entrada de datos ---
     with st.sidebar:
         st.header("Configuración de Datos")
-        # Seleccionar datos discretos o continuos con intervalos
-        tipo_datos= st.radio("Tipo de Datos:", ("Discretos", "Continuos con Intervalos"))
+        # Seleccionar datos discretos o por intervalos
+        tipo_datos= st.radio("Tipo de Datos:", ("Discretos", "Por Intervalos"))
 
         # Si es continuo con intervalos, definir criterio de intervalos  
-        if tipo_datos == "Continuos con Intervalos":
+        if tipo_datos == "Por Intervalos":
             # Ingresar criterio de intervalos, opcionalmente número de intervalos
             criterio_intervalos = st.selectbox("Criterio de Intervalos:", 
                                               ("Raíz cuadrada", "Regla de Sturges", "Regla de Scott", "Número Personalizado"))
@@ -62,7 +62,7 @@ def main():
         tabla_estadistica = pd.DataFrame()
         
         # 2. Lógica bifurcada: Discretos vs Continuos
-        if tipo_datos == "Continuos con Intervalos":
+        if tipo_datos == "Por Intervalos":
             # A. Generamos la tabla de intervalos (Límites, Marca de Clase, fi)
             tabla_estadistica = crear_intervalos(serie_original, criterio_intervalos)
             
@@ -99,7 +99,7 @@ def main():
             'Frecuencia Relativa Acumulada (Hi)': st.column_config.NumberColumn(format="%.4f", width='small'),
         }
 
-        if tipo_datos == "Continuos con Intervalos":
+        if tipo_datos == "Por Intervalos":
             # Añadimos columnas específicas de intervalos a la config
             config_columnas.update({
                 'Límite Inferior': st.column_config.NumberColumn(format="%.2f", width='small'),
