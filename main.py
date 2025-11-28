@@ -78,8 +78,7 @@ def main():
             # C. Asignamos la columna 'Valores' para compatibilidad con el gráfico (usamos Marca de Clase)
             tabla_estadistica['Valores'] = tabla_estadistica['Marca de Clase']
 
-            # Nota: Para las métricas, decidimos si usar los datos exactos o agrupados.
-            # Lo profesional es usar los datos exactos (serie_original).
+            # Usamos la serie original para métricas principales
             serie_para_metricas = serie_original
 
         else: # Discretos
@@ -100,17 +99,20 @@ def main():
         }
 
         if tipo_datos == "Por Intervalos":
+            # Crear columna 'intervalos'
+            tabla_estadistica['Intervalos'] = tabla_estadistica.apply(
+                lambda row: f"[ {row['Límite Inferior']:.2f} , {row['Límite Superior']:.2f} )", axis=1
+            )
             # Añadimos columnas específicas de intervalos a la config
             config_columnas.update({
-                'Límite Inferior': st.column_config.NumberColumn(format="%.2f", width='small'),
-                'Límite Superior': st.column_config.NumberColumn(format="%.2f", width='small'),
+                'Intervalos': st.column_config.TextColumn("Intervalos", width='small'),
                 'Valores': st.column_config.NumberColumn("Marca de Clase", format="%.2f", width='small'),
                 # Ocultamos la columna original 'Marca de Clase' si ya la mostramos como 'Valores'
 
             })
             
             # Orden de columnas preferido para visualización
-            columnas_ordenadas = ['Límite Inferior', 'Límite Superior', 'Valores', 
+            columnas_ordenadas = ['Intervalos', 'Valores', 
                                 'Frecuencia Absoluta (fi)', 'Frecuencia Relativa (hi)', 
                                 'Porcentaje (pi)', 'Frecuencia Acumulada (Fi)', 
                                 'Frecuencia Relativa Acumulada (Hi)']
