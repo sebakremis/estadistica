@@ -152,6 +152,10 @@ def main():
             kpi5, kpi6 = st.columns(2)
             kpi5.metric("Varianza", f"{metricas['varianza']:.2f}")
             kpi6.metric("Desv. Estándar", f"{metricas['desviacion']:.2f}")
+
+            kpi7, kpi8 = st.columns(2)
+            kpi7.metric("Coef. de Variación", f"{metricas['coef_variacion']:.2f}%")
+            kpi8.metric("Rango", f"{metricas['rango']:.2f}")
             
         with col2:
             # Generar Gráfico

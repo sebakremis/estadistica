@@ -32,12 +32,16 @@ def calcular_metricas_principales(serie_valores: pd.Series) -> dict:
     '''
     moda_series = serie_valores.mode()
     moda_str = ", ".join(map(str, moda_series.tolist()))
+    desvio_estandar = serie_valores.std()
+    media = serie_valores.mean()
 
     return {
-        "media": serie_valores.mean(),
+        "media": media,
         "mediana": serie_valores.median(),
-        "desviacion": serie_valores.std(),
+        "desviacion": desvio_estandar,
         "varianza": serie_valores.var(),
         "moda": moda_str,
-        "n": len(serie_valores)
+        "n": len(serie_valores),
+        "coef_variacion": (serie_valores.std() / serie_valores.mean()) * 100 if serie_valores.mean() != 0 else 0,
+        "rango": serie_valores.max() - serie_valores.min()
     }
