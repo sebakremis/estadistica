@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 from core.utils import procesar_datos
-from core.descriptive import crear_tabla_estadistica, calcular_metricas_principales
+from core.descriptive import crear_tabla_estadistica, calcular_metricas_principales, calcular_metricas_agrupadas
 from core.visualization import crear_histograma
 from core.intervals import crear_intervalos
 
@@ -59,11 +59,15 @@ def main():
 
         # Inicializamos variables para el flujo
         tabla_estadistica = pd.DataFrame()
+
+        # Definir serie para cálculo de métricas
+        serie_para_metricas = serie_original
         
         # Lógica bifurcada: Discretos vs Continuos
         if tipo_datos == "Por Intervalos":
             # A. Generamos la tabla de intervalos (Límites, Marca de Clase, fi)
             tabla_estadistica = crear_intervalos(serie_original, criterio_intervalos)
+            
             
             # B. Calculamos las columnas estadísticas DIRECTAMENTE aquí
             # (Evitamos reconstruir la serie y perder filas vacías)
@@ -76,14 +80,14 @@ def main():
             
             # C. Asignamos la columna 'Valores' para compatibilidad con el gráfico (usamos Marca de Clase)
             tabla_estadistica['Valores'] = tabla_estadistica['Marca de Clase']
+            # D. Calculamos métricas usando interpolación para datos agrupados
+            metricas= calcular_metricas_agrupadas(tabla_estadistica)
 
-            # Usamos la serie original para métricas principales
-            serie_para_metricas = serie_original
 
         else: # Discretos
             # Para discretos, usamos la función existente
             tabla_estadistica = crear_tabla_estadistica(serie_original)
-            serie_para_metricas = serie_original
+            metricas = calcular_metricas_principales(serie_original)
 
         st.write("## Distribución de Frecuencias")
 
@@ -117,8 +121,7 @@ def main():
             st.dataframe(tabla_estadistica[columnas_ordenadas], 
                          hide_index=True, 
                          column_config=config_columnas,
-                         width='stretch')
-            
+                         width='stretch')            
 
         else:
             # Configuración para Discretos
@@ -136,8 +139,6 @@ def main():
 
         with col1:
             st.subheader("Parámetros")
-            # Calculamos métricas sobre la serie
-            metricas = calcular_metricas_principales(serie_para_metricas)
 
             # Visualización de métricas
             kpi1, kpi2 = st.columns(2)
