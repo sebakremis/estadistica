@@ -50,8 +50,7 @@ def main():
 
     # --- Procesar Datos ---
     if enviar:
-        # 1. Obtenemos los datos ORIGINALES (sin agrupar)
-        # Mantenemos esta serie pura para calcular métricas exactas (Media, Mediana, etc.)
+        # Mantenemos la serie original para calcular métricas exactas (Media, Mediana, etc.)
         serie_original = procesar_datos(entrada_usuario)
         
         if serie_original.empty:
@@ -61,7 +60,7 @@ def main():
         # Inicializamos variables para el flujo
         tabla_estadistica = pd.DataFrame()
         
-        # 2. Lógica bifurcada: Discretos vs Continuos
+        # Lógica bifurcada: Discretos vs Continuos
         if tipo_datos == "Por Intervalos":
             # A. Generamos la tabla de intervalos (Límites, Marca de Clase, fi)
             tabla_estadistica = crear_intervalos(serie_original, criterio_intervalos)
@@ -88,7 +87,7 @@ def main():
 
         st.write("## Distribución de Frecuencias")
 
-        # 3. Visualización de la Tabla
+        # --- Visualización de la tabla estadística ---
         # Configuración de columnas común
         config_columnas = {
             'Frecuencia Absoluta (fi)': st.column_config.NumberColumn(format="%d", width='small'),
@@ -106,9 +105,7 @@ def main():
             # Añadimos columnas específicas de intervalos a la config
             config_columnas.update({
                 'Intervalos': st.column_config.TextColumn("Intervalos", width='small'),
-                'Valores': st.column_config.NumberColumn("Marca de Clase", format="%.2f", width='small'),
-                # Ocultamos la columna original 'Marca de Clase' si ya la mostramos como 'Valores'
-
+                'Valores': st.column_config.NumberColumn("Marca de Clase", format="%.2f", width='small')                
             })
             
             # Orden de columnas preferido para visualización
@@ -139,7 +136,7 @@ def main():
 
         with col1:
             st.subheader("Parámetros")
-            # Calculamos métricas sobre la serie (Original o Agrupada según tu preferencia)
+            # Calculamos métricas sobre la serie
             metricas = calcular_metricas_principales(serie_para_metricas)
 
             # Visualización de métricas
