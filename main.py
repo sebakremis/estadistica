@@ -72,7 +72,7 @@ def main():
             tabla_estadistica['Frecuencia Relativa (hi)'] = tabla_estadistica['Frecuencia Absoluta (fi)'] / total_n
             tabla_estadistica['Porcentaje (pi)'] = tabla_estadistica['Frecuencia Relativa (hi)']
             tabla_estadistica['Frecuencia Acumulada (Fi)'] = tabla_estadistica['Frecuencia Absoluta (fi)'].cumsum()
-            tabla_estadistica['Frecuencia Relativa Acumulada (Hi)'] = tabla_estadistica['Frecuencia Relativa (hi)'].cumsum()
+            tabla_estadistica['Frecuencia Rel Acumulada (Hi)'] = tabla_estadistica['Frecuencia Relativa (hi)'].cumsum()
             
             # C. Asignamos la columna 'Valores' para compatibilidad con el gráfico (usamos Marca de Clase)
             tabla_estadistica['Valores'] = tabla_estadistica['Marca de Clase']
@@ -94,7 +94,7 @@ def main():
             'Frecuencia Relativa (hi)': st.column_config.NumberColumn(format="%.4f", width='small'),
             'Porcentaje (pi)': st.column_config.NumberColumn(format="%.2f%%", width='small'),
             'Frecuencia Acumulada (Fi)': st.column_config.NumberColumn(format="%d", width='small'),
-            'Frecuencia Relativa Acumulada (Hi)': st.column_config.NumberColumn(format="%.4f", width='small'),
+            'Frecuencia Rel Acumulada (Hi)': st.column_config.NumberColumn(format="%.4f", width='small'),
         }
 
         if tipo_datos == "Por Intervalos":
@@ -112,7 +112,7 @@ def main():
             columnas_ordenadas = ['Intervalos', 'Valores', 
                                 'Frecuencia Absoluta (fi)', 'Frecuencia Relativa (hi)', 
                                 'Porcentaje (pi)', 'Frecuencia Acumulada (Fi)', 
-                                'Frecuencia Relativa Acumulada (Hi)']
+                                'Frecuencia Rel Acumulada (Hi)']
             
             st.dataframe(tabla_estadistica[columnas_ordenadas], 
                          hide_index=True, 
@@ -122,7 +122,7 @@ def main():
 
         else:
             # Configuración para Discretos
-            config_columnas['Valores'] = st.column_config.NumberColumn(format="%.2f", width='small')
+            config_columnas['Valores'] = st.column_config.NumberColumn(format="%.2f", width='medium')
             st.dataframe(tabla_estadistica, 
                          width='stretch', 
                          column_config=config_columnas)

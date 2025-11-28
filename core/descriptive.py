@@ -20,7 +20,7 @@ def crear_tabla_estadistica(valores: pd.Series) -> pd.DataFrame:
     tabla['Frecuencia Acumulada (Fi)'] = tabla['Frecuencia Absoluta (fi)'].cumsum()
 
     # Calcular Frecuencia Relativa Acumulada (Hi)
-    tabla['Frecuencia Relativa Acumulada (Hi)'] = tabla['Frecuencia Relativa (hi)'].cumsum()
+    tabla['Frecuencia Rel Acumulada (Hi)'] = tabla['Frecuencia Relativa (hi)'].cumsum()
 
     tabla.index.name = 'Valores'
     return tabla.round(4)
