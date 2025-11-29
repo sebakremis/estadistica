@@ -10,8 +10,7 @@ def crear_histograma(tabla_estadistica: pd.DataFrame):
     fig = px.bar(
         datos,
         x='Valores',
-        y='Frecuencia Absoluta (fi)',
-        title='Histograma de Frecuencias',
+        y='Frecuencia Absoluta (fi)'
     )
 
     # Eliminar espacios entre barras
@@ -99,7 +98,7 @@ def crear_boxplot(metricas: dict, tabla_estadistica: pd.DataFrame):
     # -----------------------------------------------------
     # 3. Estética
     # -----------------------------------------------------
-    ax.set_title('Diagrama de Caja y Bigotes')
+    ax.set_title('Diagrama de Caja (Boxplot)', fontsize=16)
     ax.set_ylabel('Valores / Marcas de Clase')
     ax.legend(loc='upper right')
     ax.grid(True, linestyle='--', alpha=0.6, axis='y')

@@ -139,8 +139,8 @@ def main():
                          column_config=config_columnas)
             
         # Mostrar cantidad de clases / intervalos
-        st.write(f"**Número de Clases / Intervalos:** {len(tabla_estadistica)}")
-        st.write(f"**Número Total de Datos (N):** {metricas['n']}")
+        st.write(f"* **Número de Clases / Intervalos:** {len(tabla_estadistica)}")
+        st.write(f"* **Número Total de Datos (N):** {metricas['n']}")
         
         st.divider()
         
@@ -173,6 +173,7 @@ def main():
             
         with col2:
             # Generar Gráfico
+            st.write("### Histograma")
             grafico = crear_histograma(tabla_estadistica)
             st.plotly_chart(grafico)
 
@@ -181,19 +182,28 @@ def main():
         st.subheader("Valores Atípicos")
         diagrama_de_cajas, valores_atipicos = crear_boxplot(metricas, tabla_estadistica)
 
+        def _render_advertencia_atipicos_():
+            '''
+            Renderiza una advertencia sobre valores atípicos.
+            '''
+            st.write("#### Atención:")
+            st.markdown("""
+            Los valores atípicos son observaciones que se encuentran significativamente alejadas del resto de los datos. 
+            Estos pueden influir en los resultados estadísticos y deben ser analizados cuidadosamente.
+            """)
+
         col1,col2 = st.columns(2)
         with col1:
             if len(valores_atipicos) == 0:
                 st.write("No se detectaron valores atipicos")
+            elif len(valores_atipicos) == 1:
+                st.write("Se detectó 1 valor atípico:")
+                st.write(f"- {valores_atipicos[0]}")
+                _render_advertencia_atipicos_()
             else:
                 st.write(f"Se dectectaron {len(valores_atipicos)} valores atípicos:")
-                for val in valores_atipicos:
-                    st.write(f"- {val}")
-                st.write("#### Atención:")
-                st.markdown("""
-                Los valores atípicos son observaciones que se encuentran significativamente alejadas del resto de los datos. 
-                Estos pueden influir en los resultados estadísticos y deben ser analizados cuidadosamente.
-                """)
+                st.write(", ".join([str(v) for v in valores_atipicos]))                    
+                _render_advertencia_atipicos_()
         with col2:
             # Diagrama de caja para valores atípicos
             
