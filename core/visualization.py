@@ -23,6 +23,7 @@ def crear_histograma(tabla_estadistica: pd.DataFrame):
         ),
         yaxis_title='Frecuencia Absoluta',
         xaxis_title='Valores',
+        height=600
     )
 
     fig.update_traces(marker_line_color='white', marker_line_width=1)
