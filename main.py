@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from core.utils import procesar_datos
 from core.descriptive import crear_tabla_estadistica, calcular_metricas_principales, calcular_metricas_agrupadas
-from core.visualization import crear_histograma
+from core.visualization import crear_histograma, crear_boxplot
 from core.intervals import crear_intervalos
 
 # --- Ocultar mensaje "Press Ctrl+Enter en st.text_area()" ---
@@ -50,7 +50,7 @@ def main():
 
     # --- Procesar Datos ---
     if enviar:
-        # Mantenemos la serie original para calcular métricas exactas (Media, Mediana, etc.)
+        # Procesar la serie original desde la entrada del usuario
         serie_original = procesar_datos(entrada_usuario)
         
         if serie_original.empty:
@@ -59,9 +59,6 @@ def main():
 
         # Inicializamos variables para el flujo
         tabla_estadistica = pd.DataFrame()
-
-        # Definir serie para cálculo de métricas
-        serie_para_metricas = serie_original
         
         # Lógica bifurcada: Discretos vs Continuos
         if tipo_datos == "Por Intervalos":
@@ -83,11 +80,16 @@ def main():
             # D. Calculamos métricas usando interpolación para datos agrupados
             metricas= calcular_metricas_agrupadas(tabla_estadistica)
 
-
         else: 
             # Metricas para valores discretos
             tabla_estadistica = crear_tabla_estadistica(serie_original)
             metricas = calcular_metricas_principales(serie_original)
+
+            # --- Fix ---
+            tabla_estadistica = tabla_estadistica.reset_index()
+            col_indice = tabla_estadistica.columns[0]
+            tabla_estadistica.rename(columns={col_indice: 'Valores'}, inplace=True)
+
 
         st.write("## Distribución de Frecuencias")
 
@@ -125,9 +127,15 @@ def main():
 
         else:
             # Configuración para Discretos
-            config_columnas['Valores'] = st.column_config.NumberColumn(format="%.2f", width='medium')
-            st.dataframe(tabla_estadistica, 
+            # Aseguramos que 'Valores' se muestre primero si lo deseamos, o dejamos el índice
+            config_columnas['Valores'] = st.column_config.NumberColumn("Valor (xi)", format="%.2f", width='small')
+            
+            # Reordenamos para que 'Valores' aparezca primero
+            cols = ['Valores'] + [c for c in tabla_estadistica.columns if c != 'Valores']
+            
+            st.dataframe(tabla_estadistica[cols], 
                          width='stretch', 
+                         hide_index=True, # Ocultamos índice porque ya tenemos la columna 'Valores'
                          column_config=config_columnas)
             
         # Mostrar cantidad de clases / intervalos
@@ -143,8 +151,7 @@ def main():
             kpi1, kpi2, kpi3 = st.columns(3)
             kpi1.metric("N (Total)", metricas['n'])
             kpi2.metric("Q1", f"{metricas['Q1']:.2f}")
-            kpi3.metric("Q3", f"{metricas['Q3']:.2f}")
-            
+            kpi3.metric("Q3", f"{metricas['Q3']:.2f}")            
             
             st.write("### Medidas de Tendencia Central")
             kpi4, kpi5, kpi6 = st.columns(3)
@@ -161,12 +168,27 @@ def main():
             kpi10.metric("Rango", f"{metricas['rango']:.2f}")
             kpi11.metric("Rango Intercuartílico", f"{metricas['rango_intercuartilico']:.2f}")
             kpi12= st.empty()  # Espacio vacío para mantener la cuadrícula
-
             
         with col2:
             # Generar Gráfico
             grafico = crear_histograma(tabla_estadistica)
             st.plotly_chart(grafico)
+
+        # --- Valores atípicos ---
+        st.divider()
+        st.subheader("Valores Atípicos")
+        col1,col2 = st.columns(2)
+        with col1:
+            st.write("#### Definición")
+            st.markdown("""
+            Los valores atípicos son observaciones que se encuentran significativamente alejadas del resto de los datos. 
+            Estos pueden influir en los resultados estadísticos y deben ser identificados y analizados cuidadosamente.
+            """)
+        with col2:
+            # Diagrama de caja para valores atípicos
+            diagrama_de_cajas = crear_boxplot(metricas, tabla_estadistica)
+            st.pyplot(diagrama_de_cajas)
+
         # --- Creditos ---
         st.divider()
         st.markdown(
