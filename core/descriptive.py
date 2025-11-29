@@ -57,7 +57,7 @@ def calcular_metricas_agrupadas(df_intervalos: pd.DataFrame) -> dict:
     Calcula métricas estadísticas precisas para datos agrupados en intervalos
     usando fórmulas de interpolación para Mediana y Moda.
     """
-    # 1. Preparación de datos
+    # Preparación de datos
     # Reseteamos el índice para asegurarnos de poder acceder a filas anterior/siguiente por posición (0, 1, 2...)
     df = df_intervalos.reset_index(drop=True)
     
@@ -71,35 +71,14 @@ def calcular_metricas_agrupadas(df_intervalos: pd.DataFrame) -> dict:
     N = df[col_fi].sum()
     
     # ---------------------------------------------------------
-    # 2. MEDIA (Ponderada)
+    # MEDIA (Ponderada)
     # Fórmula: Sum(xi * fi) / N
     # ---------------------------------------------------------
     suma_ponderada = (df[col_fi] * df[col_mc]).sum()
-    media = suma_ponderada / N
+    media = suma_ponderada / N    
     
     # ---------------------------------------------------------
-    # 3. MEDIANA (Interpolada)
-    # Fórmula: Li + ((N/2 - F_ant) / fi) * amplitud
-    # ---------------------------------------------------------
-    posicion_mediana = N / 2
-    
-    # Buscamos la primera fila donde la Frecuencia Acumulada supera a N/2
-    fila_mediana = df[df[col_Fi] >= posicion_mediana].iloc[0]
-    idx_mediana = df[df[col_Fi] >= posicion_mediana].index[0]
-    
-    # Datos del intervalo mediano
-    Li = fila_mediana[col_li]
-    fi_mediana = fila_mediana[col_fi]
-    amplitud = fila_mediana[col_ls] - Li
-    
-    # Frecuencia acumulada anterior (Fi-1)
-    # Si es el primer intervalo, la acumulada anterior es 0
-    Fi_anterior = df.at[idx_mediana - 1, col_Fi] if idx_mediana > 0 else 0
-    
-    mediana = Li + ((posicion_mediana - Fi_anterior) / fi_mediana) * amplitud
-    
-    # ---------------------------------------------------------
-    # 4. MODA (Interpolada)
+    # MODA (Interpolada)
     # Fórmula: Li + (d1 / (d1 + d2)) * amplitud
     # Donde d1 = fi - fi_anterior  y  d2 = fi - fi_siguiente
     # ---------------------------------------------------------
@@ -128,7 +107,7 @@ def calcular_metricas_agrupadas(df_intervalos: pd.DataFrame) -> dict:
     moda = round(moda, 2)
 
     # ---------------------------------------------------------
-    # 5. VARIANZA Y DESVIACIÓN
+    # VARIANZA Y DESVIACIÓN
     # ---------------------------------------------------------
     # Varianza Ponderada: Sum(fi * (xi - media)^2) / (N - 1)
     suma_cuadrados = (df[col_fi] * (df[col_mc] - media)**2).sum()
@@ -141,10 +120,32 @@ def calcular_metricas_agrupadas(df_intervalos: pd.DataFrame) -> dict:
     # Rango Total
     rango = df[col_ls].max() - df[col_li].min()
 
-    # Quartiles
-    Q1 = 0  
-    Q3 = 0
-    rango_intercuartilico = 0  
+    # ---------------------------------------------------------
+    # CUARTILES, MEDIANA Y RANGO INTERCUARTÍLICO (Calculados dinámicamente)
+    # ---------------------------------------------------------
+    
+    def obtener_cuartil(posicion_objetivo):
+        """Función auxiliar para interpolar cualquier cuantil"""
+        # 1. Buscar intervalo donde la acumulada (Fi) supera la posición
+        fila = df[df[col_Fi] >= posicion_objetivo].iloc[0]
+        idx = df[df[col_Fi] >= posicion_objetivo].index[0]
+        
+        # 2. Datos del intervalo
+        Li = fila[col_li]
+        fi_actual = fila[col_fi]
+        amplitud = fila[col_ls] - Li
+        
+        # 3. Frecuencia acumulada anterior
+        Fi_anterior = df.at[idx - 1, col_Fi] if idx > 0 else 0
+        
+        # 4. Fórmula de interpolación
+        return Li + ((posicion_objetivo - Fi_anterior) / fi_actual) * amplitud
+
+    # Calculamos Q1 (25%) y Q3 (75%)
+    Q1 = obtener_cuartil(N * 0.25)
+    Q3 = obtener_cuartil(N * 0.75)
+    mediana= obtener_cuartil(N * 0.5)
+    rango_intercuartilico = Q3 - Q1
 
     return {
         "n": N,
