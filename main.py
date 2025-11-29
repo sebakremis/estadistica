@@ -203,12 +203,12 @@ def main():
             if len(valores_atipicos) == 0:
                 st.success("✅ **Todo en orden:** No se detectaron valores atípicos en la muestra.")
             elif len(valores_atipicos) == 1:
-                st.warning("⚠️ **Atención:** Se detectó 1 valor atípico:")
-                st.write(f"[ {valores_atipicos[0]} ]")
+                st.warning("⚠️ **Atención:** Se detectó 1 valor atípico")
+                st.write(f"* Outliers = [ {valores_atipicos[0]} ]")
                 _mostrar_advertencia_atipicos_()
             else:
-                st.warning(f"⚠️ **Atención:** Se dectectaron {len(valores_atipicos)} valores atípicos:")
-                st.write("[ "+", ".join([str(v) for v in valores_atipicos])+" ]")                    
+                st.warning(f"⚠️ **Atención:** Se dectectaron {len(valores_atipicos)} valores atípicos")
+                st.write("* Outliers = [ "+", ".join([str(v) for v in valores_atipicos])+" ]")                    
                 _mostrar_advertencia_atipicos_()
 
 
