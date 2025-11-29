@@ -20,7 +20,7 @@ st.set_page_config(layout="wide", page_title="Statboard", page_icon="📊")
 
 def main():
     st.title("📊 StatBoard")
-    st.write("Estadística Descriptiva")
+    st.write("Estadística Descriptiva para Variables Cuantitativas")
 
     # --- Sidebar para entrada de datos ---
     with st.sidebar:

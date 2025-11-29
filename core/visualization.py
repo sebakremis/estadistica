@@ -68,7 +68,7 @@ def crear_boxplot(metricas: dict, serie_original: pd.Series):
     
     # Dibujamos la caja base (sin outliers automáticos)
     ax.bxp(stats, showfliers=False, patch_artist=True, 
-           boxprops=dict(facecolor='#ADD8E6', color='blue'), # Azul claro
+           boxprops=dict(facecolor='#ADD8E6', edgecolor='blue'), # Azul claro
            medianprops=dict(color='red', linewidth=2))
     
     # -----------------------------------------------------
